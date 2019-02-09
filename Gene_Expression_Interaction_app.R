@@ -2,37 +2,37 @@ library(shiny)
 library(tidyverse)
 library(shinydashboard)
 
+options(shiny.maxRequestSize = 30*1024^2)
+
 skin <- "blue"
 
-header <- dashboardHeader(
-  
-)
+header <- dashboardHeader(title = "Automated Analysis")
   
 
 sidebar <- dashboardSidebar(
   sidebarMenu(
     menuItem("Dashboard",
-             tabname = "dashboard",
+             tabName = "dashboard",
              icon = icon("tachometer-alt")),
     
     menuItem("Gene Data",
-             tabname = "gene_info",
+             tabName = "gene_info",
              icon = icon("dna")),
     
     menuItem("Expression Graphs",
-             tabname = "expression_graphs",
+             tabName = "expression_graphs",
              icon = icon("chart-bar")),
    
     menuItem("PubMed Webscrape Results",
-             tabname = "webscrape",
+             tabName = "webscrape",
              icon = icon("search")),
     
     menuItem("Data Table",
-             tabname = "raw_data",
+             tabName = "raw_data",
              icon = icon("table")),
     
     menuItem("Upload Data",
-             tabname = "upload",
+             tabName = "upload",
              icon = icon("sliders-h"),
              selected = TRUE),
     
@@ -66,8 +66,68 @@ body <- dashboardBody(
             
     ),
     
-    tabItem(tabName = "upload"
-            
+    # Tab where users will upload files to run the WebApp 
+    tabItem(tabName = "upload",
+      titlePanel(tags$b("Upload Experimental Data")),
+      fluidRow(
+        box("Type the name of the experiment you would like to represent each",
+          "experiment in graphs and figures.",
+          tags$br(),
+          "Then upload the experimental data csv file.")),
+      
+      tags$hr(),
+      
+      # Multilevel Data Upload
+      fluidRow(
+        box(title = tags$b("Multilevel Experiment"),
+            solidHeader = TRUE,
+            status = "primary",
+            textInput(inputId = "multilevel_name",
+                      label = "Multilevel Experiment Name:"),
+            fileInput(inputId = "multilevel_file",
+                      label = "Choose Multilevel CSV File",
+                      multiple = TRUE,
+                      accept = c("text/csv",
+                                 "text/comma-separated-values,text/plain",
+                                 ".csv"),
+                      buttonLabel = "Browse...",
+                      placeholder = "No file selected"))),
+      
+      tags$hr(),
+      
+      #Experiment 1 Data Upload
+      fluidRow(
+        box(title = tags$b("Experiment 1"),
+            solidHeader = TRUE,
+            status = "primary",
+            textInput(inputId = "experiment1_name",
+                      label = "Experiment 1 Name:"),
+            fileInput(inputId = "experiment1_file",
+                      label = "Choose Experiment 1 CSV File",
+                      multiple = TRUE,
+                      accept = c("text/csv",
+                                 "text/comma-separated-values,text/plain",
+                                 ".csv"),
+                      buttonLabel = "Browse...",
+                      placeholder = "No file selected"))),
+      
+      tags$hr(),  
+      
+      # Experiment 2 Data Upload
+      fluidRow(
+        box(title = tags$b("Experiment 2"),
+            solidHeader = TRUE,
+            status = "primary",
+            textInput(inputId = "experiment2_name",
+                      label = "Experiment 2 Name:"),
+            fileInput(inputId = "experiment2_file",
+                      label = "Choose Experiment 2 CSV File",
+                      multiple = TRUE,
+                      accept = c("text/csv",
+                             "text/comma-separated-values,text/plain",
+                             ".csv"),
+                      buttonLabel = "Browse...",
+                      placeholder = "No file selected")))
     )
   )
 )
